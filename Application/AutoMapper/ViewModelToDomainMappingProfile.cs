@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.ViewModel;
+using AutoMapper;
 
 namespace Application.AutoMapper
 {
@@ -9,7 +10,6 @@ namespace Application.AutoMapper
     {
         public ViewModelToDomainMappingProfile()
         {
-
         }
     }
 }

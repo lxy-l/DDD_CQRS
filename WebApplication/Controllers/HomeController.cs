@@ -35,9 +35,6 @@ namespace WebApplication.Controllers
             return View(StudentAppService.GetAll());
         }
 
-        /// <summary>
-        /// 获取微信登录token
-        /// </summary>
         public static async Task<string> GetWeChatTokenAsync()
         {
             string AppID = "wxa6cde3e5acabcdab", AppSecret = "a8d6d19659a27cebe395af215fc4e108";
