@@ -14,7 +14,6 @@ namespace Infrastructure.Context
         public DbSet<Student> Students { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-
         /// <summary>
         /// 重写自定义Map配置
         /// </summary>
