@@ -40,7 +40,7 @@ namespace Infrastructure.Context
                 .Build();
 
             // 定义要使用的数据库
-            optionsBuilder.UseMySql(config.GetConnectionString("DefaultConnection"));
+            optionsBuilder.UseMySql(config.GetConnectionString("DefaultConnection"),x=>x.MigrationsAssembly("Infrastructure.Migrations"));
         }
     }
 }
