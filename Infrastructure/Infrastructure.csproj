@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Bus\" />
+    <Folder Include="UnitOfWork\" />
+  </ItemGroup>
 </Project>

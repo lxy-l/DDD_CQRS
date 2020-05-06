@@ -6,7 +6,8 @@ using Application.ViewModel;
 
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-
+using Domain.Commands;
+using Domain.Core.Bus;
 using Domain.Interfaces;
 using Domain.Models;
 
@@ -22,14 +23,21 @@ namespace Application.Services
     {
         // 注意这里是要IoC依赖注入的，还没有实现
         private readonly IStudentRepository _StudentRepository;
-        // 用来进行DTO
+        //用来进行DTO
         private readonly IMapper _mapper;
-        public StudentAppService(IStudentRepository StudentRepository,IMapper mapper)
+        //中介者 总线
+        private readonly IMediatorHandler Bus;
+
+        public StudentAppService(
+            IStudentRepository StudentRepository,
+            IMediatorHandler bus,
+            IMapper mapper
+            )
         {
             _StudentRepository = StudentRepository;
             _mapper = mapper;
+            Bus = bus;
         }
-
         public IEnumerable<StudentViewModel> GetAll()
         {
 
@@ -50,8 +58,11 @@ namespace Application.Services
             //这里引入领域设计中的写命令 还没有实现
             //请注意这里如果是平时的写法，必须要引入Student领域模型，会造成污染
 
-            _StudentRepository.Add(_mapper.Map<Student>(StudentViewModel));
-            _StudentRepository.SaveChanges();
+            //_StudentRepository.Add(_mapper.Map<Student>(StudentViewModel));
+            //_StudentRepository.SaveChanges();
+
+            var registerCommand = _mapper.Map<RegisterStudentCommand>(StudentViewModel);
+            Bus.SendCommand(registerCommand);
         }
 
         public void Update(StudentViewModel StudentViewModel)

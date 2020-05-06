@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.Context;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +28,11 @@ namespace WebApplication
             // .NET Core 原生依赖注入
             // 单写一层用来添加依赖项，可以将IoC与展示层 Presentation 隔离
             InjectorSetup.RegisterServices(services);
+            // Adding MediatR for Domain Events
+            // 领域命令、领域事件等注入
+            // 引用包 MediatR.Extensions.Microsoft.DependencyInjection
+            services.AddMediatR(typeof(Startup));
+
             services.AddAutoMapperSetup();
             services.AddControllersWithViews();
         }
