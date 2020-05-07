@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Domain.Core.Bus;
 using Domain.Core.Commands;
+using Domain.Core.Events;
 using Infrastructure.Internal;
 using MediatR;
 
@@ -72,6 +73,17 @@ namespace Infrastructure.Bus
             // 执行封装好的处理程序
             // 说白了就是执行我们的命令
             return handler.Handle(request, cancellationToken, _serviceFactory);
+        }
+
+        /// 引发事件的实现方法
+        /// </summary>
+        /// <typeparam name="T">泛型 继承 Event：INotification</typeparam>
+        /// <param name="event">事件模型，比如StudentRegisteredEvent</param>
+        /// <returns></returns>
+        public Task RaiseEvent<T>(T @event) where T : Event
+        {
+            // MediatR中介者模式中的第二种方法，发布/订阅模式
+            return _mediator.Publish(@event);
         }
     }
 }

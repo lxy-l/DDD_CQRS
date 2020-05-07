@@ -1,6 +1,8 @@
 ﻿using Domain.Commands;
 using Domain.Core.Bus;
 using Domain.Core.Commands;
+using Domain.Core.Notifications;
+using Domain.Events;
 using Domain.Interfaces;
 using Domain.Models;
 using MediatR;
@@ -66,9 +68,12 @@ namespace Domain.CommandHandlers
             // 这些业务逻辑，当然要在领域层中（领域命令处理程序中）进行处理
             if (_studentRepository.GetByEmail(customer.Email) != null)
             {
-                //这里对错误信息进行发布，目前采用缓存形式
-                List<string> errorInfo = new List<string>() { "The customer e-mail has already been taken." };
-                _cache.Set("ErrorData", errorInfo);
+                ////这里对错误信息进行发布，目前采用缓存形式
+                //List<string> errorInfo = new List<string>() { "该邮箱已经被使用！" };
+                //Cache.Set("ErrorData", errorInfo);
+
+                //引发错误事件
+                Bus.RaiseEvent(new DomainNotification("", "该邮箱已经被使用！"));
                 return Task.FromResult(new Unit());
             }
 
@@ -80,26 +85,12 @@ namespace Domain.CommandHandlers
             {
                 // 提交成功后，这里需要发布领域事件
                 // 比如欢迎用户注册邮件呀，短信呀等
-
+                Bus.RaiseEvent(new StudentRegisteredEvent(customer.Id, customer.Name, customer.Email, customer.BirthDate, customer.Phone));
                 // waiting....
             }
 
             return Task.FromResult(new Unit());
 
-        }
-
-        //将领域命令中的验证错误信息收集
-        //目前用的是缓存方法（以后通过领域通知替换）
-        protected void NotifyValidationErrors(Command message)
-        {
-            List<string> errorInfo = new List<string>();
-            foreach (var error in message.ValidationResult.Errors)
-            {
-                errorInfo.Add(error.ErrorMessage);
-
-            }
-            //将错误信息收集
-            _cache.Set("ErrorData", errorInfo);
         }
 
         // 同上，UpdateStudentCommand 的处理方法

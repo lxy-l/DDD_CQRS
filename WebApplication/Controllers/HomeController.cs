@@ -1,6 +1,8 @@
 ﻿using Application.Interfaces;
 using Application.ViewModel;
 using Domain.Commands;
+using Domain.Core.Notifications;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -22,13 +24,14 @@ namespace WebApplication.Controllers
     public class HomeController : Controller
     {
         public ILogger<HomeController> Logger { get; }
-
+        private readonly DomainNotificationHandler _notifications;
         public IStudentAppService _studentAppService { get; }
 
-        public HomeController(ILogger<HomeController> logger,IStudentAppService studentAppService)
+        public HomeController(ILogger<HomeController> logger,IStudentAppService studentAppService,INotificationHandler<DomainNotification> notifications)
         {
             Logger = logger;
             _studentAppService = studentAppService;
+            _notifications = (DomainNotificationHandler)notifications;
         }
 
         public IActionResult Index()
@@ -80,9 +83,9 @@ namespace WebApplication.Controllers
                 //var errorData = _cache.Get("ErrorData");
                 //if (errorData == null)
 
-                // 是否存在消息通知
-                //if (!_notifications.HasNotifications())
-                //    ViewBag.Sucesso = "Student Registered!";
+                //是否存在消息通知
+                if (!_notifications.HasNotifications())
+                    ViewBag.Sucesso = "Student Registered!";
 
                 return View(studentViewModel);
             }
