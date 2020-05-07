@@ -115,7 +115,7 @@ namespace WebApplication.Controllers
         public async Task<string> UploadWeChatFileAsync()
         {
             var file = Request.Form.Files[0];
-            string token = await GetWeChatTokenAsync("wxa6cde3e5acabcdab","a8d6d19659a27cebe395af215fc4e108"), type = "image";
+            string token = await GetWeChatTokenAsync("wxa6cde3e5acabcdab","a8d6d19659a27cebe395af215fc4e108"), type = "video";
             string url = $"https://api.weixin.qq.com/cgi-bin/media/upload?access_token={token}&type={type}";
             using HttpClient httpClient = new HttpClient();
             using Stream fileStream = file.OpenReadStream();
