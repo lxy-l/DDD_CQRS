@@ -19,12 +19,15 @@ namespace Infrastructure.Bus
         private readonly IMediator _mediator;
         //注入服务工厂
         private readonly ServiceFactory _serviceFactory;
+        // 事件仓储服务
+        private readonly IEventStoreService _eventStoreService;
         private static readonly ConcurrentDictionary<Type, object> _requestHandlers = new ConcurrentDictionary<Type, object>();
 
-        public InMemoryBus(IMediator mediator, ServiceFactory serviceFactory)
+        public InMemoryBus(IMediator mediator, ServiceFactory serviceFactory, IEventStoreService eventStoreService)
         {
             _mediator = mediator;
             _serviceFactory = serviceFactory;
+            _eventStoreService = eventStoreService;
         }
 
 
@@ -75,6 +78,7 @@ namespace Infrastructure.Bus
             return handler.Handle(request, cancellationToken, _serviceFactory);
         }
 
+        /// <summary>
         /// 引发事件的实现方法
         /// </summary>
         /// <typeparam name="T">泛型 继承 Event：INotification</typeparam>
@@ -82,6 +86,10 @@ namespace Infrastructure.Bus
         /// <returns></returns>
         public Task RaiseEvent<T>(T @event) where T : Event
         {
+            // 除了领域通知以外的事件都保存下来
+            if (!@event.MessageType.Equals("DomainNotification"))
+                _eventStoreService?.Save(@event);
+
             // MediatR中介者模式中的第二种方法，发布/订阅模式
             return _mediator.Publish(@event);
         }
