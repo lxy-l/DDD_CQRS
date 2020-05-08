@@ -44,16 +44,16 @@ namespace Domain.Models
             this.Street = street;
         }
 
-      
 
-        //protected override bool EqualsCore(Address other)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
-        //protected override int GetHashCodeCore()
-        //{
-        //    throw new NotImplementedException();
-        //}
+        protected override bool EqualsCore(Address other)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override int GetHashCodeCore()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

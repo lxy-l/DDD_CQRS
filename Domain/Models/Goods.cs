@@ -13,6 +13,16 @@ namespace Domain.Models
     public class Goods : ValueObject<Goods>
     {
         public string Name;
+
+        protected override bool EqualsCore(Goods other)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override int GetHashCodeCore()
+        {
+            throw new NotImplementedException();
+        }
         //...
     }
 }
