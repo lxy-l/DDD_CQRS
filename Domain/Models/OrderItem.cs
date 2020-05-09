@@ -12,9 +12,11 @@ namespace Domain.Models
     /// </summary>
     public class OrderItem : Entity
     {
-        public float Price;
-        public Goods Goods;
-        public int Count;
-        //...
+        /// <summary>
+        /// 详情名
+        /// </summary>
+        public string Name { get; private set; }
+
+        public virtual Order Order { get; set; }
     }
 }

@@ -15,9 +15,23 @@ namespace Domain.Models
     /// 属性都是值对象
     public class Order : AggregateRoot
     {
-        public string OrderNo;//值对象
-        public Address Address;//值对象
-        public List<OrderItem> Items;//实体集合
-        //...
+        protected Order()
+        {
+        }
+        public Order(Guid id, string name, List<OrderItem> orderItem)
+        {
+            Id = id;
+            Name = name;
+            OrderItem = orderItem;
+        }
+        /// <summary>
+        /// 订单名
+        /// </summary>
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// 订单详情
+        /// </summary>
+        public virtual ICollection<OrderItem> OrderItem { get; private set; }
     }
 }
