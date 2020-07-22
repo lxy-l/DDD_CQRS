@@ -25,16 +25,17 @@ namespace WebApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // .NET Core 原生依赖注入
-            // 单写一层用来添加依赖项，可以将IoC与展示层 Presentation 隔离
-            InjectorSetup.RegisterServices(services);
+            services.AddControllersWithViews();
             // Adding MediatR for Domain Events
             // 领域命令、领域事件等注入
             // 引用包 MediatR.Extensions.Microsoft.DependencyInjection
             services.AddMediatR(typeof(Startup));
 
             services.AddAutoMapperSetup();
-            services.AddControllersWithViews();
+            // .NET Core 原生依赖注入
+            // 单写一层用来添加依赖项，可以将IoC与展示层 Presentation 隔离
+            InjectorSetup.RegisterServices(services);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,10 +55,10 @@ namespace WebApplication
 
             app.UseAuthorization();
             //数据自动迁移
-            var serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
-            using var serviceScope = serviceScopeFactory.CreateScope();
-            var dbContext = serviceScope.ServiceProvider.GetService<StudyContext>();
-            dbContext.Database.EnsureCreated();
+            //var serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            //using var serviceScope = serviceScopeFactory.CreateScope();
+            //var dbContext = serviceScope.ServiceProvider.GetService<StudyContext>();
+            //dbContext.Database.EnsureCreated();
 
             app.UseEndpoints(endpoints =>
             {
